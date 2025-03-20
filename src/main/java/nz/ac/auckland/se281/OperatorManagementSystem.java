@@ -15,8 +15,11 @@ public class OperatorManagementSystem {
     Location locationFound = Location.fromString(location);
     String locationAsString = locationFound.getFullName();
     
+    // Using First letter class to get the first letter of the operator name
+    FirstLetters firstLetters = new FirstLetters();
+    String operatorInitials = firstLetters.getFirstLetters(operatorName);
 
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName,"",locationAsString);
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName,operatorInitials,locationAsString);
   }
 
   public void viewActivities(String operatorId) {
