@@ -13,10 +13,10 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
     Location locationFound = Location.fromString(location);
-    String locationAsString = locationFound.getNameEnglish();
+    String locationAsString = locationFound.getFullName();
     
 
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName,locationAsString);
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName,"",locationAsString);
   }
 
   public void viewActivities(String operatorId) {
