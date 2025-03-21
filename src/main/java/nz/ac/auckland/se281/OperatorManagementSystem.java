@@ -60,6 +60,13 @@ public class OperatorManagementSystem {
   public void createOperator(String operatorName, String location) {
     Location locationFound = Location.fromString(location);
     String locationAsString = locationFound.getFullName();
+    // For each loop to check the name and location of the operator that already exists
+    for (Operator operator : operators) {
+      if (operator.getName().equals(operatorName) && operator.getLocation().equals(locationAsString)) {
+        MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(operatorName, locationAsString);
+        return;
+      }
+    }
     String locationAbbreviation = locationFound.getLocationAbbreviation();
     
     // Using First letter class to get the first letter of the operator name
