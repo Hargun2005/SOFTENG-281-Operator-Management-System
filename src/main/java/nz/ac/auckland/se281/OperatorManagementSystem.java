@@ -6,18 +6,56 @@ import java.util.List;
 public class OperatorManagementSystem {
 
   private List<LocationTracker> locationTrackers;
+  private List<Operator> operators;
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
     locationTrackers = new ArrayList<>();
+    operators = new ArrayList<>();
     for (Location location : Location.values()) {
       locationTrackers.add(new LocationTracker(location));
     }
   }
 
   public void searchOperators(String keyword) {
-    MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
-  }
+    List<Operator> matchingOperators = new ArrayList<>();
+
+    // Search for matching operators
+    for (Operator operator : operators) {
+        if (keyword.equals("*") || operator.getName().toLowerCase().contains(keyword.toLowerCase())) {
+            matchingOperators.add(operator);
+        }
+    }
+
+    // Determine the message based on the number of matching operators
+    int count = matchingOperators.size();
+    String verb;
+    String plural;
+    String punctuation;
+
+    if (count == 0) {
+        // No matching operators found
+        MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
+    } else {
+        // Determine verb and plural based on count
+        if (count == 1) {
+            verb = "is";
+            plural = "";
+        } else {
+            verb = "are";
+            plural = "s";
+        }
+        punctuation = ":"; // Always use colon when there are matching operators
+        MessageCli.OPERATORS_FOUND.printMessage(verb, String.valueOf(count), plural, punctuation);
+
+        // Print each matching operator using MessageCli.OPERATOR_ENTRY
+        for (Operator operator : matchingOperators) {
+            MessageCli.OPERATOR_ENTRY.printMessage(
+                operator.getName(), operator.getId(), operator.getLocation()
+            );
+        }
+    }
+}
 
   public void createOperator(String operatorName, String location) {
     Location locationFound = Location.fromString(location);
@@ -32,6 +70,8 @@ public class OperatorManagementSystem {
     LocationTracker tracker = findLocationTracker(locationFound);
     int operatorCount = tracker.incrementAndGetCount();
     String operatorId = operatorInitials + "-" + locationAbbreviation + "-" + String.format("%03d", operatorCount);
+
+    operators.add(new Operator(operatorName, operatorId, locationAsString));
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId,locationAsString);
   }
