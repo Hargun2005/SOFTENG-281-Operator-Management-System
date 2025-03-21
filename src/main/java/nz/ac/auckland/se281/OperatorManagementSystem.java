@@ -19,12 +19,16 @@ public class OperatorManagementSystem {
 
   public void searchOperators(String keyword) {
     List<Operator> matchingOperators = new ArrayList<>();
-
+    String renameKeyword = keyword.toLowerCase();
+   
     // Search for matching operators
     for (Operator operator : operators) {
-        if (keyword.equals("*") || operator.getName().toLowerCase().contains(keyword.toLowerCase())) {
-            matchingOperators.add(operator);
-        }
+      String operatorName = operator.getName().toLowerCase();
+      String operatorLocation = operator.getLocation().toLowerCase();
+      if (keyword.equals("*") || operatorName.contains(renameKeyword) || operatorLocation.contains(renameKeyword)) {
+        matchingOperators.add(operator);
+      }
+       
     }
 
     // Determine the message based on the number of matching operators
