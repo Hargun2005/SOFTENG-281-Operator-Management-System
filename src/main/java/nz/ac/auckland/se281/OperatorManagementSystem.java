@@ -18,17 +18,26 @@ public class OperatorManagementSystem {
   }
 
   public void searchOperators(String keyword) {
+    String renameKeyword = keyword.trim().toLowerCase();
     List<Operator> matchingOperators = new ArrayList<>();
-    String renameKeyword = keyword.toLowerCase();
-   
+   // Check if the keyword matches any location abbreviation
+   String locationFullName = null;
+   for (Location location : Location.values()) {
+       if (location.getLocationAbbreviation().equalsIgnoreCase(renameKeyword)) {
+           locationFullName = location.getFullName().toLowerCase();
+           break;
+       }
+   }
     // Search for matching operators
     for (Operator operator : operators) {
       String operatorName = operator.getName().toLowerCase();
       String operatorLocation = operator.getLocation().toLowerCase();
-      if (keyword.equals("*") || operatorName.contains(renameKeyword) || operatorLocation.contains(renameKeyword)) {
+      // Check if the keyword matches location abbreviation
+      if (keyword.equals("*") || operatorName.contains(renameKeyword) || operatorLocation.contains(renameKeyword)|| 
+      (locationFullName != null && operatorLocation.equals(locationFullName)) ) {
         matchingOperators.add(operator);
       }
-       
+    
     }
 
     // Determine the message based on the number of matching operators
@@ -98,6 +107,7 @@ public class OperatorManagementSystem {
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId,locationAsString);
   }
+  
   private LocationTracker findLocationTracker(Location location) {
     for (LocationTracker tracker : locationTrackers) {
       if (tracker.getLocation() == location) {
