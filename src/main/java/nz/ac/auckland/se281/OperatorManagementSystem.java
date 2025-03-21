@@ -70,6 +70,11 @@ public class OperatorManagementSystem {
       }
 
     Location locationFound = Location.fromString(location);
+    // Prints an error message if fromString returns null
+    if (locationFound == null) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return;
+    }
     String locationAsString = locationFound.getFullName();
     // For each loop to check the name and location of the operator that already exists
     for (Operator operator : operators) {
