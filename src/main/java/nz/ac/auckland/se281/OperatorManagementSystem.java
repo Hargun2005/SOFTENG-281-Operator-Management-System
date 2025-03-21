@@ -62,6 +62,13 @@ public class OperatorManagementSystem {
 }
 
   public void createOperator(String operatorName, String location) {
+      // Trim thr operator name to remove spaces
+      String trimName = operatorName.trim();
+      if(trimName.length()<3){
+        MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+        return;
+      }
+
     Location locationFound = Location.fromString(location);
     String locationAsString = locationFound.getFullName();
     // For each loop to check the name and location of the operator that already exists
