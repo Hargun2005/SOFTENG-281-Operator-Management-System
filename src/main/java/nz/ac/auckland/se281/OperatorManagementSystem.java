@@ -18,6 +18,10 @@ public class OperatorManagementSystem {
   }
 
   public void searchOperators(String keyword) {
+    if (keyword == null || keyword.trim().isEmpty()) {
+      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
+      return;
+  }
     String renameKeyword = keyword.trim().toLowerCase();
     List<Operator> matchingOperators = new ArrayList<>();
    // Check if the keyword matches any location abbreviation
