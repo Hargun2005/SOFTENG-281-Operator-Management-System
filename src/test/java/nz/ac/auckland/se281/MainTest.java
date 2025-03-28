@@ -293,135 +293,269 @@ public class MainTest {
       public YourTests() {
         super(Main.class);
       }
-    @Test
-      public void T1_17_search_operators_wildcard() throws Exception {
-      runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "*", EXIT));
-      
-      assertContains("There are 14 matching operators found:");
-      assertContains("* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
-      assertContains("* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
-      assertContains("* Mystical Waikato Whale Watching ('MWWW-HLZ-001' located in 'Hamilton | Kirikiriroa')");
-      // Add assertions for all 14 operators
-      assertDoesNotContain("There is", true);
-      }
-    @Test
-    public void T1_18_search_operators_invalid_location() throws Exception {
-    runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "Atlantis", EXIT));
 
-    assertContains("There are no matching operators found.");
-    assertDoesNotContain("There is", true);
+      @Test
+      public void T1_17_search_operators_wildcard() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "*", EXIT));
+
+        assertContains("There are 14 matching operators found:");
+        assertContains(
+            "* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
+        assertContains(
+            "* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
+        assertContains(
+            "* Mystical Waikato Whale Watching ('MWWW-HLZ-001' located in 'Hamilton |"
+                + " Kirikiriroa')");
+        // Add assertions for all 14 operators
+        assertDoesNotContain("There is", true);
+      }
+
+      @Test
+      public void T1_18_search_operators_invalid_location() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "Atlantis", EXIT));
+
+        assertContains("There are no matching operators found.");
+        assertDoesNotContain("There is", true);
+      }
     }
-    }
+
     @Test
     public void T1_19_create_operator_invalid_name() throws Exception {
-    runCommands(CREATE_OPERATOR, "'Hi'", "'AKL'", EXIT);
+      runCommands(CREATE_OPERATOR, "'Hi'", "'AKL'", EXIT);
 
-    assertContains("Operator not created: 'Hi' is not a valid operator name.");
-    assertDoesNotContain("Successfully created operator", true);
+      assertContains("Operator not created: 'Hi' is not a valid operator name.");
+      assertDoesNotContain("Successfully created operator", true);
     }
-    @Test
-    public void T1_20_create_operator_duplicate_name_different_location() throws Exception {
-    runCommands(
-        CREATE_OPERATOR, "'Volcano Bungee Jump'", "'AKL'", //
-        CREATE_OPERATOR, "'Volcano Bungee Jump'", "'TRG'", //
-        EXIT);
 
-    assertContains("Successfully created operator 'Volcano Bungee Jump' ('VBJ-AKL-001') located in 'Auckland | Tāmaki Makaurau'.");
-    assertContains("Successfully created operator 'Volcano Bungee Jump' ('VBJ-TRG-001') located in 'Tauranga'.");
-    assertDoesNotContain("Operator not created", true);
-    }
+    // Test Case 20
+
     @Test
     public void T1_21_search_operators_case_insensitive() throws Exception {
-    runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "aUcKlAnD", EXIT));
+      runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "aUcKlAnD", EXIT));
 
-    assertContains("There are 2 matching operators found:");
-    assertContains("* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
-    assertContains("* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
-    assertDoesNotContain("There is", true);
+      assertContains("There are 2 matching operators found:");
+      assertContains(
+          "* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
+      assertContains(
+          "* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
+      assertDoesNotContain("There is", true);
     }
+
     @Test
     public void T1_22_create_operator_invalid_location() throws Exception {
-    runCommands(CREATE_OPERATOR, "'Invalid Operator'", "'Atlantis'", EXIT);
+      runCommands(CREATE_OPERATOR, "'Invalid Operator'", "'Atlantis'", EXIT);
 
-    assertContains("Operator not created: 'Atlantis' is an invalid location.");
-    assertDoesNotContain("Successfully created operator", true);
+      assertContains("Operator not created: 'Atlantis' is an invalid location.");
+      assertDoesNotContain("Successfully created operator", true);
     }
+
     @Test
     public void T1_23_search_operators_partial_location_match() throws Exception {
-    runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "tāmAki", EXIT));
+      runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "tāmAki", EXIT));
 
-    assertContains("There are 2 matching operators found:");
-    assertContains("* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
-    assertContains("* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
-    assertDoesNotContain("There is", true);
+      assertContains("There are 2 matching operators found:");
+      assertContains(
+          "* West Auckland Camel Treks ('WACT-AKL-001' located in 'Auckland | Tāmaki Makaurau')");
+      assertContains(
+          "* Volcano Bungee Jump ('VBJ-AKL-002' located in 'Auckland | Tāmaki Makaurau')");
+      assertDoesNotContain("There is", true);
     }
+
     @Test
     public void T1_25_create_multiple_operators_same_location() throws Exception {
-    runCommands(
-        CREATE_OPERATOR, "'Operator One'", "'AKL'", //
-        CREATE_OPERATOR, "'Operator Two'", "'AKL'", //
-        EXIT);
+      runCommands(
+          CREATE_OPERATOR,
+          "'Operator One'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Two'",
+          "'AKL'", //
+          EXIT);
 
-    assertContains("Successfully created operator 'Operator One' ('OO-AKL-001') located in 'Auckland | Tāmaki Makaurau'.");
-    assertContains("Successfully created operator 'Operator Two' ('OT-AKL-002') located in 'Auckland | Tāmaki Makaurau'.");
-    assertDoesNotContain("Operator not created", true);
+      assertContains(
+          "Successfully created operator 'Operator One' ('OO-AKL-001') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Two' ('OT-AKL-002') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertDoesNotContain("Operator not created", true);
     }
+
     @Test
     public void T1_26_search_operators_empty_input() throws Exception {
-    // Step 1: Create 14 operators using the predefined setup
-    runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "''", EXIT)); // Empty input
+      // Step 1: Create 14 operators using the predefined setup
+      runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "''", EXIT)); // Empty input
 
-    // Step 2: Assert that no matching operators are found
-    assertContains("There are no matching operators found.");
+      // Step 2: Assert that no matching operators are found
+      assertContains("There are no matching operators found.");
 
-    // Step 3: Assert that no unexpected output is present
-    assertContains(
-      "Successfully created operator 'West Auckland Camel Treks' ('WACT-AKL-001') located in"
-          + " 'Auckland | Tāmaki Makaurau'.");
-  assertContains(
-      "Successfully created operator 'Volcano Bungee Jump' ('VBJ-AKL-002') located in"
-          + " 'Auckland | Tāmaki Makaurau'.");
-  assertContains(
-      "Successfully created operator 'Mystical Waikato Whale Watching' ('MWWW-HLZ-001') located"
-          + " in 'Hamilton | Kirikiriroa'.");
-  assertContains(
-      "Successfully created operator 'Hobbiton Skydiving Tours' ('HST-HLZ-002') located in"
-          + " 'Hamilton | Kirikiriroa'.");
-  assertContains(
-      "Successfully created operator 'Mount Maunganui Ski Resort' ('MMSR-TRG-001') located in"
-          + " 'Tauranga'.");
-  assertContains(
-      "Successfully created operator 'Shark Snorkel Bay' ('SSB-TRG-002') located in"
-          + " 'Tauranga'.");
-  assertContains(
-      "Successfully created operator 'Huka Falls Barrel Rides' ('HFBR-TUO-001') located in"
-          + " 'Taupo | Taupō-nui-a-Tia'.");
-  assertContains(
-      "Successfully created operator 'Taupo UFO Watching' ('TUW-TUO-002') located in"
-          + " 'Taupo | Taupō-nui-a-Tia'.");
-  assertContains(
-      "Successfully created operator 'Parliament Bungee Jump' ('PBJ-WLG-001') located in"
-          + " 'Wellington | Te Whanganui-a-Tara'.");
-  assertContains(
-      "Successfully created operator 'Nelson UFO Watching' ('NUW-NSN-001') located in"
-          + " 'Nelson | Whakatu'.");
-  assertContains(
-      "Successfully created operator 'Christchurch Camel Treks' ('CCT-CHC-001') located in"
-          + " 'Christchurch | Ōtautahi'.");
-  assertContains(
-      "Successfully created operator 'Avon River Whitewater Rafting' ('ARWR-CHC-002') located"
-          + " in 'Christchurch | Ōtautahi'.");
-  assertContains(
-      "Successfully created operator 'Dunedin Penguin Parade' ('DPP-DUD-001') located in"
-          + " 'Dunedin | Ōtepoti'.");
-  assertContains(
-      "Successfully created operator 'Baldwin Street Ski Jumping' ('BSSJ-DUD-002') located in"
-          + " 'Dunedin | Ōtepoti'.");
-    assertDoesNotContain("There is", true);
-}
+      // Step 3: Assert that no unexpected output is present
+      assertContains(
+          "Successfully created operator 'West Auckland Camel Treks' ('WACT-AKL-001') located in"
+              + " 'Auckland | Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Volcano Bungee Jump' ('VBJ-AKL-002') located in"
+              + " 'Auckland | Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Mystical Waikato Whale Watching' ('MWWW-HLZ-001') located"
+              + " in 'Hamilton | Kirikiriroa'.");
+      assertContains(
+          "Successfully created operator 'Hobbiton Skydiving Tours' ('HST-HLZ-002') located in"
+              + " 'Hamilton | Kirikiriroa'.");
+      assertContains(
+          "Successfully created operator 'Mount Maunganui Ski Resort' ('MMSR-TRG-001') located in"
+              + " 'Tauranga'.");
+      assertContains(
+          "Successfully created operator 'Shark Snorkel Bay' ('SSB-TRG-002') located in"
+              + " 'Tauranga'.");
+      assertContains(
+          "Successfully created operator 'Huka Falls Barrel Rides' ('HFBR-TUO-001') located in"
+              + " 'Taupo | Taupō-nui-a-Tia'.");
+      assertContains(
+          "Successfully created operator 'Taupo UFO Watching' ('TUW-TUO-002') located in"
+              + " 'Taupo | Taupō-nui-a-Tia'.");
+      assertContains(
+          "Successfully created operator 'Parliament Bungee Jump' ('PBJ-WLG-001') located in"
+              + " 'Wellington | Te Whanganui-a-Tara'.");
+      assertContains(
+          "Successfully created operator 'Nelson UFO Watching' ('NUW-NSN-001') located in"
+              + " 'Nelson | Whakatu'.");
+      assertContains(
+          "Successfully created operator 'Christchurch Camel Treks' ('CCT-CHC-001') located in"
+              + " 'Christchurch | Ōtautahi'.");
+      assertContains(
+          "Successfully created operator 'Avon River Whitewater Rafting' ('ARWR-CHC-002') located"
+              + " in 'Christchurch | Ōtautahi'.");
+      assertContains(
+          "Successfully created operator 'Dunedin Penguin Parade' ('DPP-DUD-001') located in"
+              + " 'Dunedin | Ōtepoti'.");
+      assertContains(
+          "Successfully created operator 'Baldwin Street Ski Jumping' ('BSSJ-DUD-002') located in"
+              + " 'Dunedin | Ōtepoti'.");
+      assertDoesNotContain("There is", true);
+    }
 
+    @Test
+    public void T1_27_create_multiple_operators_same_location() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'Operator One'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Two'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Three'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Four'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Five'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Six'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Seven'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Eight'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Nine'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Ten'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Eleven'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Twelve'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator Thirteen'",
+          "'AKL'", //
+          EXIT);
 
-    
+      assertContains(
+          "Successfully created operator 'Operator One' ('OO-AKL-001') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Two' ('OT-AKL-002') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Three' ('OT-AKL-003') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Four' ('OF-AKL-004') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Five' ('OF-AKL-005') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Six' ('OS-AKL-006') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Seven' ('OS-AKL-007') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Eight' ('OE-AKL-008') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Nine' ('ON-AKL-009') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Ten' ('OT-AKL-010') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Eleven' ('OE-AKL-011') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Twelve' ('OT-AKL-012') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator Thirteen' ('OT-AKL-013') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertDoesNotContain("Operator not created", true);
+    }
+
+    @Test
+    public void T1_28_create_operator_id_full() throws Exception {
+      runCommands(CREATE_OPERATOR, "'West Auckland Camel Treks'", "'akL'", EXIT);
+
+      assertContains(
+          "Successfully created operator 'West Auckland Camel Treks' ('WACT-AKL-001') located in"
+              + " 'Auckland | Tāmaki Makaurau'.");
+      assertDoesNotContain("Operator not created", true);
+      assertDoesNotContain("There is", true);
+      assertDoesNotContain("There are", true);
+    }
+
+    @Test
+    public void T1_29_create_operator_valid_location_full_name_english() throws Exception {
+      runCommands(CREATE_OPERATOR, "'Parliament Bungee Jump'", "'wlG'", EXIT);
+
+      assertContains(
+          "Successfully created operator 'Parliament Bungee Jump' ('PBJ-WLG-001') located in"
+              + " 'Wellington | Te Whanganui-a-Tara'.");
+      assertDoesNotContain("Operator not created", true);
+      assertDoesNotContain("There is", true);
+      assertDoesNotContain("There are", true);
+    }
+
+    @Test
+    public void T1_30_create_operator_valid_location_full_name_english() throws Exception {
+      runCommands(CREATE_OPERATOR, "'Cars'", "'wlG'", EXIT);
+
+      assertContains(
+          "Successfully created operator 'Cars' ('C-WLG-001') located in"
+              + " 'Wellington | Te Whanganui-a-Tara'.");
+      assertDoesNotContain("Operator not created", true);
+      assertDoesNotContain("There is", true);
+      assertDoesNotContain("There are", true);
+    }
   }
 
   @FixMethodOrder(MethodSorters.NAME_ASCENDING)
