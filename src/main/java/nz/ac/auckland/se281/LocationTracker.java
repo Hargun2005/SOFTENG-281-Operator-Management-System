@@ -1,8 +1,8 @@
 package nz.ac.auckland.se281;
 
-import nz.ac.auckland.se281.Types.Location;
 import java.util.ArrayList;
 import java.util.List;
+import nz.ac.auckland.se281.Types.Location;
 
 public class LocationTracker {
 
