@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 public class OperatorManagementSystem {
 
-  private List<LocationTracker> locationTrackers;
+  private LocationTracker locationTrackerManager;
   private List<Operator> operators;
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
-    locationTrackers = new ArrayList<>();
+    locationTrackerManager = new LocationTracker(); // Initialize location trackers
     operators = new ArrayList<>();
-    for (Location location : Location.values()) {
-      locationTrackers.add(new LocationTracker(location));
-    }
   }
 
   public void searchOperators(String keyword) {
@@ -76,11 +73,11 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
       // Trim thr operator name to remove spaces
-      String trimName = operatorName.trim();
-      if(trimName.length()<3){
-        MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
-        return;
-      }
+    String trimName = operatorName.trim();
+    if(trimName.length()<3){
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+      return;
+    }
 
     Location locationFound = Location.fromString(location);
     // Prints an error message if fromString returns null
@@ -103,7 +100,11 @@ public class OperatorManagementSystem {
     String operatorInitials = firstLetters.getFirstLetters(operatorName);
 
     // Find the tracker for the location and increment the count
-    LocationTracker tracker = findLocationTracker(locationFound);
+    LocationTracker tracker = locationTrackerManager.findTracker(locationFound);
+    if (tracker == null) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return;
+    }
     int operatorCount = tracker.incrementAndGetCount();
     String operatorId = operatorInitials + "-" + locationAbbreviation + "-" + String.format("%03d", operatorCount);
 
@@ -111,15 +112,8 @@ public class OperatorManagementSystem {
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId,locationAsString);
   }
-  
-  private LocationTracker findLocationTracker(Location location) {
-    for (LocationTracker tracker : locationTrackers) {
-      if (tracker.getLocation() == location) {
-        return tracker; // Return the tracker if found
-      }
-    }
-    return null; // Return null if no tracker is found
-  }
+
+
 
   public void viewActivities(String operatorId) {
     // TODO implement
