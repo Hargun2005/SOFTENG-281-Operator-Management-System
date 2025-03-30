@@ -16,6 +16,7 @@ public class OperatorManagementSystem {
   }
 
   public void searchOperators(String keyword) {
+    // If the keyword is null or empty, display a message indicating no operators were found
     if (keyword == null || keyword.trim().isEmpty()) {
       MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
       return;
@@ -75,6 +76,7 @@ public class OperatorManagementSystem {
   public void createOperator(String operatorName, String location) {
     // Trim thr operator name to remove spaces
     String trimName = operatorName.trim();
+    // Validate that the operator name has at least 3 characters
     if (trimName.length() < 3) {
       MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
       return;
@@ -104,16 +106,19 @@ public class OperatorManagementSystem {
 
     // Find the tracker for the location and increment the count
     LocationTracker tracker = locationTrackerManager.findTracker(locationFound);
+    // If the location tracker for the given location is not found, display an error message
     if (tracker == null) {
       MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
       return;
     }
     int operatorCount = tracker.incrementAndGetCount();
+    // Generate a unique operator ID using the operator's initials, location abbreviation,
+    // and a sequential number for the location
     String operatorId =
         operatorInitials + "-" + locationAbbreviation + "-" + String.format("%03d", operatorCount);
-
+    // Add the new operator to the list
     operators.add(new Operator(operatorName, operatorId, locationAsString));
-
+    // Print a success message
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
   }
 

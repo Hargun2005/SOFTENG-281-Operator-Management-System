@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import nz.ac.auckland.se281.Types.Location;
 
+/**
+ * The LocationTracker class is responsible for tracking operators at specific locations. It
+ * maintains a count of operators for each location and provides methods to retrieve and manage
+ * location-specific trackers.
+ */
 public class LocationTracker {
 
   private List<LocationTracker> locationTrackers;
