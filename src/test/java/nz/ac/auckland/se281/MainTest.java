@@ -327,7 +327,25 @@ public class MainTest {
       assertDoesNotContain("Successfully created operator", true);
     }
 
-    // Test Case 20
+    @Test
+    public void T1_20_create_multiple_operators_same_location() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'Operator1'",
+          "'AKL'", //
+          CREATE_OPERATOR,
+          "'Operator2'",
+          "'AKL'", //
+          EXIT);
+
+      assertContains(
+          "Successfully created operator 'Operator1' ('O-AKL-001') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertContains(
+          "Successfully created operator 'Operator2' ('O-AKL-002') located in 'Auckland |"
+              + " Tāmaki Makaurau'.");
+      assertDoesNotContain("Operator not created", true);
+    }
 
     @Test
     public void T1_21_search_operators_case_insensitive() throws Exception {
@@ -535,10 +553,10 @@ public class MainTest {
 
     @Test
     public void T1_29_create_operator_valid_location_full_name_english() throws Exception {
-      runCommands(CREATE_OPERATOR, "'Parliament Bungee Jump'", "'wlG'", EXIT);
+      runCommands(CREATE_OPERATOR, "'parliament bungee jump'", "'wlG'", EXIT);
 
       assertContains(
-          "Successfully created operator 'Parliament Bungee Jump' ('PBJ-WLG-001') located in"
+          "Successfully created operator 'parliament bungee jump' ('PBJ-WLG-001') located in"
               + " 'Wellington | Te Whanganui-a-Tara'.");
       assertDoesNotContain("Operator not created", true);
       assertDoesNotContain("There is", true);
