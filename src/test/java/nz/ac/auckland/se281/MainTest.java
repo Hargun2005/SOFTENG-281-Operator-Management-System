@@ -574,6 +574,18 @@ public class MainTest {
       assertDoesNotContain("There is", true);
       assertDoesNotContain("There are", true);
     }
+
+    @Test
+    public void T1_31_create_operator_valid_location_full_name_english() throws Exception {
+      runCommands(CREATE_OPERATOR, "'Cars  '", "'wlG'", EXIT);
+
+      assertContains(
+          "Successfully created operator 'Cars' ('C-WLG-001') located in"
+              + " 'Wellington | Te Whanganui-a-Tara'.");
+      assertDoesNotContain("Operator not created", true);
+      assertDoesNotContain("There is", true);
+      assertDoesNotContain("There are", true);
+    }
   }
 
   @FixMethodOrder(MethodSorters.NAME_ASCENDING)
