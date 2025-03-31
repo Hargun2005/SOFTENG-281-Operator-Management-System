@@ -91,8 +91,7 @@ public class OperatorManagementSystem {
     String locationAsString = locationFound.getFullName();
     // For each loop to check the name and location of the operator that already exists
     for (Operator operator : operators) {
-      if (operator.getName().equals(operatorName)
-          && operator.getLocation().equals(locationAsString)) {
+      if (operator.getName().equals(trimName) && operator.getLocation().equals(locationAsString)) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
             operatorName, locationAsString);
         return;
@@ -102,7 +101,7 @@ public class OperatorManagementSystem {
 
     // Using First letter class to get the first letter of the operator name
     FirstLetters firstLetters = new FirstLetters();
-    String operatorInitials = firstLetters.getFirstLetters(operatorName);
+    String operatorInitials = firstLetters.getFirstLetters(trimName);
 
     // Find the tracker for the location and increment the count
     LocationTracker tracker = locationTrackerManager.findTracker(locationFound);
@@ -117,9 +116,9 @@ public class OperatorManagementSystem {
     String operatorId =
         operatorInitials + "-" + locationAbbreviation + "-" + String.format("%03d", operatorCount);
     // Add the new operator to the list
-    operators.add(new Operator(operatorName, operatorId, locationAsString));
+    operators.add(new Operator(trimName, operatorId, locationAsString));
     // Print a success message
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
+    MessageCli.OPERATOR_CREATED.printMessage(trimName, operatorId, locationAsString);
   }
 
   public void viewActivities(String operatorId) {
