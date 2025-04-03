@@ -8,11 +8,13 @@ public class OperatorManagementSystem {
 
   private LocationTracker locationTrackerManager;
   private List<Operator> operators;
+  private ActivityTracker activityTrackerManager;
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
     locationTrackerManager = new LocationTracker(); // Initialize location trackers
     operators = new ArrayList<>();
+    activityTrackerManager = new ActivityTracker(); // Initialize activity trackers
   }
 
   public void searchOperators(String keyword) {
@@ -116,9 +118,12 @@ public class OperatorManagementSystem {
     String operatorId =
         operatorInitials + "-" + locationAbbreviation + "-" + String.format("%03d", operatorCount);
     // Add the new operator to the list
-    operators.add(new Operator(trimName, operatorId, locationAsString));
-    // Print a success message
+    Operator newOperator = new Operator(trimName, operatorId, locationAsString);
+    operators.add(newOperator); // Print a success message
     MessageCli.OPERATOR_CREATED.printMessage(trimName, operatorId, locationAsString);
+    // Add a new ActivityTracker for the operator
+
+    activityTrackerManager.addTracker(new ActivityTracker(newOperator));
   }
 
   public void viewActivities(String operatorId) {
@@ -126,6 +131,8 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
+    // Remove the leading and trailing spaces from the activity name
+    String trimmedActivityName = activityName.trim();
     // Checks the length of the activity name
     if (activityName.trim().length() < 3) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
@@ -137,15 +144,21 @@ public class OperatorManagementSystem {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
       return;
     }
-
+    // Find the ActivityTracker for the operator
+    ActivityTracker tracker = activityTrackerManager.findTracker(operator);
+    if (tracker == null) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+      return;
+    }
+    // Generate the next activity ID
+    String activityId = operator.generateNextActivityId();
     // Creates the activity
     Types.ActivityType activityTypeEnum = Types.ActivityType.fromString(activityType);
-    String activityId = operator.generateNextActivityId();
-    Activity activity = new Activity(activityName, activityTypeEnum, activityId);
+    Activity activity = new Activity(trimmedActivityName, activityTypeEnum, activityId);
     operator.addActivity(activity);
     // Print a success message
     MessageCli.ACTIVITY_CREATED.printMessage(
-        activityName, activityId, activityType, operator.getName());
+        trimmedActivityName, activityId, activityTypeEnum.toString(), operator.getName());
   }
 
   private Operator findOperatorById(String operatorId) {
