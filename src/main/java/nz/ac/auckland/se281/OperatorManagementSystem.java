@@ -126,7 +126,35 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-    // TODO implement
+    // Checks the length of the activity name
+    if (activityName.trim().length() < 3) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
+      return;
+    }
+    // Find the Operator by ID
+    Operator operator = findOperatorById(operatorId);
+    if (operator == null) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+      return;
+    }
+
+    // Creates the activity
+    Types.ActivityType activityTypeEnum = Types.ActivityType.fromString(activityType);
+    String activityId = operator.generateNextActivityId();
+    Activity activity = new Activity(activityName, activityTypeEnum, activityId);
+    operator.addActivity(activity);
+    // Print a success message
+    MessageCli.ACTIVITY_CREATED.printMessage(
+        activityName, activityId, activityType, operator.getName());
+  }
+
+  private Operator findOperatorById(String operatorId) {
+    for (Operator operator : operators) {
+      if (operator.getId().equals(operatorId)) {
+        return operator;
+      }
+    }
+    return null;
   }
 
   public void searchActivities(String keyword) {
