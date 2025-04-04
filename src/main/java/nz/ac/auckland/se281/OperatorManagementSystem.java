@@ -127,7 +127,39 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
-    // TODO implement
+    // Search for the operator by ID
+    Operator operator = findOperatorById(operatorId);
+    if (operator == null) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+    // Get the list of activities for the operator
+    List<Activity> activities = operator.getActivities();
+    int activityCount = activities.size();
+    if (activityCount == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+    } else {
+      String verb;
+      String plural;
+
+      if (activityCount == 1) {
+        verb = "is";
+        plural = "y";
+      } else {
+        verb = "are";
+        plural = "ies";
+      }
+      // Print the header
+      MessageCli.ACTIVITIES_FOUND.printMessage(verb, String.valueOf(activityCount), plural, ":");
+      // Print each activity's details using MessageCli.ACTIVITY_ENTRY
+      for (Activity activity : activities) {
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activity.getName(),
+            activity.getActivityId(),
+            activity.getType().toString(),
+            operator.getName());
+      }
+    }
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
