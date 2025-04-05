@@ -203,7 +203,55 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    // TODO implement
+    if (keyword == null || keyword.trim().isEmpty()) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+    String searchKeyword = keyword.trim().toLowerCase();
+    List<Activity> matchingActivities = new ArrayList<>();
+    // Search for matching activities
+    for (Operator operator : operators) {
+      for (Activity activity : operator.getActivities()) {
+        String activityName = activity.getName().toLowerCase();
+        String activityType = activity.getType().toString().toLowerCase();
+        String operatorLocation = operator.getLocation().toLowerCase();
+        // Check if the keyword matches the activity name, ID, or type
+        if (searchKeyword.equals("*")
+            || activityName.contains(searchKeyword)
+            || activityType.contains(searchKeyword)
+            || operatorLocation.contains(searchKeyword)) {
+          matchingActivities.add(activity);
+        }
+      }
+    }
+    // Determine the number of matching activities
+    int count = matchingActivities.size();
+    if (count == 0) {
+      // No matching activities found
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+    } else {
+      // Determine verb and plural based on count
+      String verb;
+      String plural;
+      if (count == 1) {
+        verb = "is";
+        plural = "y";
+      } else {
+        verb = "are";
+        plural = "ies";
+      }
+      // Print the header
+      MessageCli.ACTIVITIES_FOUND.printMessage(verb, String.valueOf(count), plural, ":");
+      // Print each activity's details using MessageCli.ACTIVITY_ENTRY
+      for (Activity activity : matchingActivities) {
+        Operator operator = findOperatorById(activity.getActivityId().split("-")[0]);
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activity.getName(),
+            activity.getActivityId(),
+            activity.getType().toString(),
+            operator.getName());
+      }
+    }
   }
 
   public void addPublicReview(String activityId, String[] options) {
