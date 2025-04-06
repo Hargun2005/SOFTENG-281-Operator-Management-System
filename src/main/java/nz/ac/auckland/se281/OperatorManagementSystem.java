@@ -242,14 +242,24 @@ public class OperatorManagementSystem {
       }
       // Print the header
       MessageCli.ACTIVITIES_FOUND.printMessage(verb, String.valueOf(count), plural, ":");
-      // Print each activity's details using MessageCli.ACTIVITY_ENTRY
+      // Print the details of each matching activity
       for (Activity activity : matchingActivities) {
-        Operator operator = findOperatorById(activity.getActivityId().split("-")[0]);
-        MessageCli.ACTIVITY_ENTRY.printMessage(
-            activity.getName(),
-            activity.getActivityId(),
-            activity.getType().toString(),
-            operator.getName());
+        // Extract the operator ID from the activity ID
+        String operatorId =
+            activity.getActivityId().split("-")[0]
+                + "-"
+                + activity.getActivityId().split("-")[1]
+                + "-"
+                + activity.getActivityId().split("-")[2];
+        Operator operator = findOperatorById(operatorId);
+
+        if (operator != null) {
+          MessageCli.ACTIVITY_ENTRY.printMessage(
+              activity.getName(),
+              activity.getActivityId(),
+              activity.getType().toString(),
+              operator.getName());
+        }
       }
     }
   }
