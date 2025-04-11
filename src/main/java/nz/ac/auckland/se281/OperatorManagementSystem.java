@@ -310,11 +310,49 @@ public class OperatorManagementSystem {
   }
 
   public void addPrivateReview(String activityId, String[] options) {
-    // TODO implement
+    // Validate activity ID
+    Activity activity = findActivityById(activityId);
+    if (activity == null) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+    // Extract values from the options array
+    String reviewerName = options[0];
+    String email = options[1];
+    int rating = Math.max(1, Math.min(5, Integer.parseInt(options[2]))); // Adjust rating to 1-5
+    String comments = options[3];
+    boolean followUpRequested = options[4].equalsIgnoreCase("y");
+    // Generate review ID
+    int reviewNumber = activity.getReviews().size() + 1;
+    String reviewId = activityId + "-R" + reviewNumber;
+    // Create and add the private review
+    PrivateReview review =
+        new PrivateReview(reviewId, reviewerName, email, rating, comments, followUpRequested);
+    activity.addReview(review);
+    // Print success message
+    MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activity.getName());
   }
 
   public void addExpertReview(String activityId, String[] options) {
-    // TODO implement
+    // Validate activity ID
+    Activity activity = findActivityById(activityId);
+    if (activity == null) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+    // Extract Options
+    String reviewName = options[0];
+    int rating = Math.max(1, Math.min(5, Integer.parseInt(options[1]))); // Adjust rating to 1-5
+    String comments = options[2];
+    boolean recommended = options[3].equalsIgnoreCase("y");
+    // Generate review ID
+    int reviewNumber = activity.getReviews().size() + 1;
+    String reviewId = activityId + "-R" + reviewNumber;
+    // Create and add the expert review
+    ExpertReview review = new ExpertReview(reviewId, reviewName, rating, comments, recommended);
+    activity.addReview(review);
+    // Print success message
+    MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activity.getName());
   }
 
   public void displayReviews(String activityId) {
