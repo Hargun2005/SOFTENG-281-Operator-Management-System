@@ -264,8 +264,49 @@ public class OperatorManagementSystem {
     }
   }
 
+  // Helper method to find activity by its ID
+  private Activity findActivityById(String activityId) {
+    for (Operator operator : operators) {
+      for (Activity activity : operator.getActivities()) {
+        if (activity.getActivityId().equals(activityId)) {
+          return activity;
+        }
+      }
+    }
+    return null;
+  }
+
   public void addPublicReview(String activityId, String[] options) {
-    // TODO implement
+    // Validate activity ID
+    Activity activity = findActivityById(activityId);
+    if (activity == null) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    // Extract values from the options array
+    String reviewerName = options[0];
+    boolean isAnonymous = options[1].equalsIgnoreCase("y");
+    int rating = Integer.parseInt(options[2]);
+    String comments = options[3];
+
+    // Adjust the rating using if-else statements
+    if (rating < 1) {
+      rating = 1; // Set to minimum valid rating
+    } else if (rating > 5) {
+      rating = 5; // Set to maximum valid rating
+    }
+
+    // Generate review ID
+    int reviewNumber = activity.getReviews().size() + 1;
+    String reviewId = activityId + "-R" + reviewNumber;
+
+    // Create and add the public review
+    PublicReview review = new PublicReview(reviewId, reviewerName, rating, comments, isAnonymous);
+    activity.addReview(review);
+
+    // Print success message
+    MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activity.getName());
   }
 
   public void addPrivateReview(String activityId, String[] options) {
