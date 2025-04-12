@@ -394,7 +394,38 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
-    // TODO implement
+    // Find the review by its ID
+    Review review = findReviewById(reviewId);
+    if (review == null) {
+      // If the review is not found, print an error message
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+    // Check if the review is a PublicReview
+    if (review instanceof PublicReview) {
+      // Cast the review to PublicReview
+      PublicReview publicReview = (PublicReview) review;
+      publicReview.endorse(); // Endorse the review
+      // Print success message
+      MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
+    } else {
+      // If the review is not a public review, print an error message
+      MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
+    }
+  }
+
+  // Helper method to find a review by its ID
+  private Review findReviewById(String reviewId) {
+    for (Operator operator : operators) {
+      for (Activity activity : operator.getActivities()) {
+        for (Review review : activity.getReviews()) {
+          if (review.getReviewId().equals(reviewId)) {
+            return review;
+          }
+        }
+      }
+    }
+    return null; // Return null if the review is not found
   }
 
   public void resolveReview(String reviewId, String response) {
