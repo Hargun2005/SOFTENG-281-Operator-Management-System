@@ -450,7 +450,24 @@ public class OperatorManagementSystem {
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
-    // TODO implement
+    // Find the review by its Id
+    Review review = findReviewById(reviewId);
+    if (review == null) {
+      // if the review is not found, print an error message
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+    // Check if the review is an ExpertReview
+    if (review instanceof ExpertReview) {
+      // Cast the review to ExpertReview
+      ExpertReview expertReview = (ExpertReview) review;
+      expertReview.addImage(imageName); // Add the image to the review
+      // Print success message
+      MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
+    } else {
+      // If the review is not an expert review, print an error message
+      MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(imageName, reviewId);
+    }
   }
 
   public void displayTopActivities() {
