@@ -24,7 +24,14 @@ public class PrivateReview extends Review {
 
   @Override
   public void display() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'display'");
+    // Use MessageCli templates to format the output
+    MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+        String.valueOf(rating), "5", "Private", reviewId, reviewerName);
+    MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(comments);
+    if (followUpRequested && response.equals("-")) {
+      MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(email);
+    } else {
+      MessageCli.REVIEW_ENTRY_RESOLVED.printMessage(response);
+    }
   }
 }
