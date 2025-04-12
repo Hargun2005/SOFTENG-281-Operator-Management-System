@@ -429,7 +429,24 @@ public class OperatorManagementSystem {
   }
 
   public void resolveReview(String reviewId, String response) {
-    // TODO implement
+    // Find the review by its ID
+    Review review = findReviewById(reviewId);
+    if (review == null) {
+      // If the review is not found, print an error message
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+    // Check if the review is a PrivateReview
+    if (review instanceof PrivateReview) {
+      // cast review to PrivateReview and resolve it
+      PrivateReview privateReview = (PrivateReview) review;
+      privateReview.setResponse(response);
+      // Print success message
+      MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
+    } else {
+      // If the review is not a private review, print an error message
+      MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
+    }
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
