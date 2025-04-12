@@ -356,7 +356,41 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    // TODO implement
+    // Validate activity ID
+    Activity activity = findActivityById(activityId);
+    if (activity == null) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+    // Get the list of reviews for the activity
+    List<Review> reviews = activity.getReviews();
+
+    // Check if there are no reviews
+    if (reviews.isEmpty()) {
+      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activity.getName());
+      return;
+    }
+    int reviewCount = reviews.size();
+    if (reviewCount == 0) {
+      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", ".");
+    } else {
+      String verb;
+      String plural;
+      if (reviewCount == 1) {
+        verb = "is";
+        plural = "";
+      } else {
+        verb = "are";
+        plural = "s";
+      }
+      // Print the header
+      MessageCli.REVIEWS_FOUND.printMessage(
+          verb, String.valueOf(reviewCount), plural, activity.getName());
+      // Print each review's details using MessageCli.REVIEW_ENTRY
+      for (Review review : reviews) {
+        review.display();
+      }
+    }
   }
 
   public void endorseReview(String reviewId) {
