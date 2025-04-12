@@ -4,6 +4,10 @@ public class PublicReview extends Review {
   private boolean isAnonymous;
   private boolean isEndorsed;
 
+  public boolean isAnonymous() {
+    return isAnonymous;
+  }
+
   public PublicReview(
       String reviewId, String reviewerName, int rating, String comments, boolean isAnonymous) {
     super(reviewId, isAnonymous ? "Anonymous" : reviewerName, rating, comments);
@@ -17,7 +21,12 @@ public class PublicReview extends Review {
 
   @Override
   public void display() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'display'");
+    // MessageCli to format the output
+    MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+        String.valueOf(rating), "5", "Public", reviewId, reviewerName);
+    MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(comments);
+    if (isEndorsed) {
+      MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
+    }
   }
 }
