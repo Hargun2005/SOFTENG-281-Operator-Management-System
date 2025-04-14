@@ -471,6 +471,47 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
-    // TODO implement
+    // iterate through all locations
+    for (Location location : Location.values()) {
+      String locationName = location.getFullName();
+      List<Activity> activitiesInLocation = new ArrayList<>();
+
+      // Collect all activities for operators in the current location
+      for (Operator operator : operators) {
+        if (operator.getLocation().equals(locationName)) {
+          activitiesInLocation.addAll(operator.getActivities());
+        }
+      }
+      // Find the top activity in the location
+      Activity topActivity = null;
+      double highestAverageRating = 0.0;
+
+      for (Activity activity : activitiesInLocation) {
+        List<Review> reviews = activity.getReviews();
+        double totalRating = 0.0;
+        int count = 0;
+        // Calculate the average rating for public and expert reviews
+        for (Review review : reviews) {
+          if (review instanceof PublicReview || review instanceof ExpertReview) {
+            totalRating += review.getRating();
+            count++;
+          }
+        }
+        if (count > 0) {
+          double averageRating = totalRating / count;
+          if (topActivity == null || averageRating > highestAverageRating) {
+            topActivity = activity;
+            highestAverageRating = averageRating;
+          }
+        }
+      }
+      // Print the result for the location
+      if (topActivity == null) {
+        MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(locationName);
+      } else {
+        MessageCli.TOP_ACTIVITY.printMessage(
+            locationName, topActivity.getName(), String.valueOf(highestAverageRating));
+      }
+    }
   }
 }
