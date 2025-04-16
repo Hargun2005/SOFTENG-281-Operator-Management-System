@@ -209,6 +209,15 @@ public class OperatorManagementSystem {
     }
     String searchKeyword = keyword.trim().toLowerCase();
     List<Activity> matchingActivities = new ArrayList<>();
+
+    // Check if the keyword matches a location abbreviation
+    String locationFullName = null;
+    for (Location location : Location.values()) {
+      if (location.getLocationAbbreviation().equalsIgnoreCase(searchKeyword)) {
+        locationFullName = location.getFullName().toLowerCase();
+        break;
+      }
+    }
     // Search for matching activities
     for (Operator operator : operators) {
       for (Activity activity : operator.getActivities()) {
@@ -219,7 +228,8 @@ public class OperatorManagementSystem {
         if (searchKeyword.equals("*")
             || activityName.contains(searchKeyword)
             || activityType.contains(searchKeyword)
-            || operatorLocation.contains(searchKeyword)) {
+            || operatorLocation.contains(searchKeyword)
+            || (locationFullName != null && operatorLocation.equals(locationFullName))) {
           matchingActivities.add(activity);
         }
       }
