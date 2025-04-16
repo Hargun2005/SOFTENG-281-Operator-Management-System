@@ -369,7 +369,7 @@ public class OperatorManagementSystem {
     // Validate activity ID
     Activity activity = findActivityById(activityId);
     if (activity == null) {
-      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
       return;
     }
     // Get the list of reviews for the activity
@@ -476,7 +476,7 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
     } else {
       // If the review is not an expert review, print an error message
-      MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(imageName, reviewId);
+      MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
     }
   }
 
