@@ -494,11 +494,11 @@ public class OperatorManagementSystem {
       }
       // Find the top activity in the location
       Activity topActivity = null;
-      double highestAverageRating = 0.0;
+      int highestAverageRating = 0;
 
       for (Activity activity : activitiesInLocation) {
         List<Review> reviews = activity.getReviews();
-        double totalRating = 0.0;
+        int totalRating = 0;
         int count = 0;
         // Calculate the average rating for public and expert reviews
         for (Review review : reviews) {
@@ -508,7 +508,7 @@ public class OperatorManagementSystem {
           }
         }
         if (count > 0) {
-          double averageRating = totalRating / count;
+          int averageRating = totalRating / count;
           if (topActivity == null || averageRating > highestAverageRating) {
             topActivity = activity;
             highestAverageRating = averageRating;
