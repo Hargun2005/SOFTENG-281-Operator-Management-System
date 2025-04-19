@@ -193,6 +193,7 @@ public class OperatorManagementSystem {
         trimmedActivityName, activityId, activityTypeEnum.toString(), operator.getName());
   }
 
+  // Finds an operator by its unique ID and returns it, or null if not found.
   private Operator findOperatorById(String operatorId) {
     for (Operator operator : operators) {
       if (operator.getId().equals(operatorId)) {
