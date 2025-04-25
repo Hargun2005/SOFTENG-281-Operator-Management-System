@@ -10,9 +10,17 @@ public class PublicReview extends Review {
 
   public PublicReview(
       String reviewId, String reviewerName, int rating, String comments, boolean isAnonymous) {
-    super(reviewId, isAnonymous ? "Anonymous" : reviewerName, rating, comments);
+    super(reviewId, getReviewerName(isAnonymous, reviewerName), rating, comments);
     this.isAnonymous = isAnonymous;
     this.isEndorsed = false;
+  }
+
+  private static String getReviewerName(boolean isAnonymous, String reviewerName) {
+    if (isAnonymous) {
+      return "Anonymous";
+    } else {
+      return reviewerName;
+    }
   }
 
   public void endorse() {
